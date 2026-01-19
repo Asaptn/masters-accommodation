@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Payment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
 <body>
 
   <div style="padding:40px; font-family: Arial;">
@@ -11,51 +19,52 @@
   <!-- Flutterwave -->
   <script src="https://checkout.flutterwave.com/v3.js"></script>
 
-  <!-- Payment Logic -->
   <script>
-    const params = new URLSearchParams(window.location.search);
+    // ✅ READ BOOKING FROM SESSION STORAGE
+    const booking = JSON.parse(sessionStorage.getItem("booking"));
 
-    const name = params.get("name");
-    const email = params.get("email");
-    const apartment = decodeURIComponent(params.get("apartment"));
-    const nights = parseInt(params.get("nights"));
+    if (!booking) {
+      alert("❌ No booking data found");
+      window.location.href = "index.html";
+    }
 
-    const prices = {
-      "1 Bedroom Apartment": 350,
-      "2 Bedroom Apartment": 500,
-      "3 Bedroom Apartment": 700
-    };
+    const {
+      name,
+      email,
+      apartment,
+      nights,
+      amount
+    } = booking;
 
-    const pricePerNight = prices[apartment];
-    const totalAmount = pricePerNight * nights;
-
+    // DISPLAY SUMMARY
     document.getElementById("summary").innerHTML = `
-      Name: ${name}<br>
-      Email: ${email}<br>
-      Apartment: ${apartment}<br>
-      Nights: ${nights}<br>
-      <strong>Total: $${totalAmount}</strong>
+      <strong>Name:</strong> ${name}<br>
+      <strong>Email:</strong> ${email}<br>
+      <strong>Apartment:</strong> ${apartment}<br>
+      <strong>Nights:</strong> ${nights}<br>
+      <strong>Total:</strong> $${amount}
     `;
 
+    // PAY NOW
     document.getElementById("payNow").onclick = function () {
       FlutterwaveCheckout({
         public_key: "FLWPUBK-eedd3e4e11cc685c3c851a3173222836-X",
         tx_ref: "tx_" + Date.now(),
-        amount: totalAmount,
+        amount: amount,
         currency: "USD",
         customer: {
           email: email,
           name: name
         },
         callback: function (response) {
-  if (response.status === "successful") {
-    window.location.href = "success.html";
-  }
-
-          
+          if (response.status === "successful") {
+            sessionStorage.removeItem("booking");
+            window.location.href = "success.html";
+          }
         }
       });
     };
   </script>
 
 </body>
+</html>
