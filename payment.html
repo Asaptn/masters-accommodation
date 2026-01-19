@@ -1,0 +1,61 @@
+<body>
+
+  <div style="padding:40px; font-family: Arial;">
+    <h2>Payment Summary</h2>
+
+    <p id="summary"></p>
+
+    <button id="payNow">Pay Now</button>
+  </div>
+
+  <!-- Flutterwave -->
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+
+  <!-- Payment Logic -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    const name = params.get("name");
+    const email = params.get("email");
+    const apartment = decodeURIComponent(params.get("apartment"));
+    const nights = parseInt(params.get("nights"));
+
+    const prices = {
+      "1 Bedroom Apartment": 350,
+      "2 Bedroom Apartment": 500,
+      "3 Bedroom Apartment": 700
+    };
+
+    const pricePerNight = prices[apartment];
+    const totalAmount = pricePerNight * nights;
+
+    document.getElementById("summary").innerHTML = `
+      Name: ${name}<br>
+      Email: ${email}<br>
+      Apartment: ${apartment}<br>
+      Nights: ${nights}<br>
+      <strong>Total: $${totalAmount}</strong>
+    `;
+
+    document.getElementById("payNow").onclick = function () {
+      FlutterwaveCheckout({
+        public_key: "FLWPUBK-eedd3e4e11cc685c3c851a3173222836-X",
+        tx_ref: "tx_" + Date.now(),
+        amount: totalAmount,
+        currency: "USD",
+        customer: {
+          email: email,
+          name: name
+        },
+        callback: function (response) {
+  if (response.status === "successful") {
+    window.location.href = "success.html";
+  }
+
+          
+        }
+      });
+    };
+  </script>
+
+</body>
