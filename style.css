@@ -325,15 +325,14 @@ input {
 }
 
 .hero {
-  position: relative;
-  height: 70vh;
-  background: url("images/hero.jpg") center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
+ .hero {
+  background-image: url("../images/hero.jpg");
+  background-size: cover;
+  background-position: center;
 }
+
+}
+
 
 /* Dark overlay */
 .hero-overlay {
