@@ -2,73 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payment | Masters Accommodation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment</title>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 30px;
-      max-width: 600px;
-      margin: auto;
-    }
-
-    button {
-      padding: 12px 20px;
-      margin-top: 10px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 16px;
-    }
-
-    select, input {
-      padding: 10px;
-      width: 100%;
-      margin-top: 8px;
-    }
-
-    hr {
-      margin: 30px 0;
-    }
+    body { font-family: Arial; padding: 30px; }
+    button { padding: 12px 20px; margin: 10px 0; cursor: pointer; }
+    .crypto-box { border: 1px solid #ddd; padding: 15px; margin-top: 15px; display:none; }
+    .wallet { background:#f5f5f5; padding:10px; margin:8px 0; font-size:14px; }
   </style>
 </head>
 
 <body>
 
-  <h2>Payment Summary</h2>
-  <p id="summary"></p>
+<h2>Payment Summary</h2>
+<div id="summary"></div>
 
-  <hr>
+<hr>
 
-  <h3>Pay with Card</h3>
-  <button id="payNow">Pay with Card</button>
+<button id="payCard">💳 Pay with Card / Bank</button>
+<button id="payCrypto">🪙 Pay with Crypto</button>
 
-  <hr>
-
+<!-- CRYPTO SECTION -->
+<div class="crypto-box" id="cryptoBox">
   <h3>Pay with Crypto</h3>
 
-  <select id="cryptoSelect" onchange="updateCrypto()">
-    <option value="USDT">USDT (TRC20)</option>
-    <option value="BTC">Bitcoin (BTC)</option>
-    <option value="ETH">Ethereum (ERC20)</option>
-  </select>
+  <p><strong>Send EXACT amount:</strong></p>
 
-  <p><strong>Wallet Address</strong></p>
-  <input id="cryptoWallet" type="text" readonly onclick="this.select()" />
+  <div class="wallet">
+    <strong>USDT (TRC20)</strong><br>
+    0x5869e8f91ef708af50218699e2573d08DfAF1eA1
+  </div>
+
+  <div class="wallet">
+    <strong>Bitcoin (BTC)</strong><br>
+   bc1qvyzc33xz36c3l47my7hcj92g6cdsr2wet2gjm4
+  </div>
+
+  <div class="wallet">
+    <strong>Ethereum (ETH)</strong><br>
+    0x5869e8f91ef708af50218699e2573d08DfAF1eA1
+  </div>
 
   <p>
-    Amount: <strong id="cryptoAmount"></strong>
+    After payment, click below and send your transaction hash.
   </p>
 
-  <p style="color: #555;">
-    Send the exact amount.<br>
-    After payment, you’ll be redirected to send a SMS with your details.
-  </p>
+  <button id="confirmCrypto">✅ I Have Paid</button>
+</div>
 
-  <button onclick="confirmCrypto()">I Have Paid (Crypto)</button>
+<script src="https://checkout.flutterwave.com/v3.js"></script>
 
-  <script src="https://checkout.flutterwave.com/v3.js"></script>
-  <script src="payment.js"></script>
+<script>
+  // READ BOOKING
+  const bookingRaw = sessionStorage.getItem("booking");
+  if (!bookingRaw) {
+    alert("Booking missing. Please start again.");
+    window.location.href = "index.html";
+  }
+
+  const booking = JSON.parse(bookingRaw);
+  const { name, email, apartment, nights, amount } = booking;
+
+  document.getElementById("summary").innerHTML = `
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Apartment:</strong> ${apartment}</p>
+    <p><strong>Nights:</strong> ${nights}</p>
+    <p><strong>Total:</strong> $${amount}</p>
+  `;
+
+  // FLUTTERWAVE
+  document.getElementById("payCard").onclick = function () {
+    FlutterwaveCheckout({
+      public_key: "FLWPUBK-eedd3e4e11cc685c3c851a3173222836-X",
+      tx_ref: "tx_" + Date.now(),
+      amount: amount,
+      currency: "USD",
+      customer: {
+        email: email,
+        name: name
+      },
+      callback: function (response) {
+        if (response.status === "successful") {
+          sessionStorage.clear();
+          window.location.href = "success.html";
+        }
+      }
+    });
+  };
+
+  // SHOW CRYPTO
+  document.getElementById("payCrypto").onclick = function () {
+    document.getElementById("cryptoBox").style.display = "block";
+  };
+
+  // CONFIRM CRYPTO
+  document.getElementById("confirmCrypto").onclick = function () {
+    const message = `
+Hello, I have made a crypto payment.
+
+Name: ${name}
+Apartment: ${apartment}
+Nights: ${nights}
+Amount: $${amount}
+
+Transaction Hash:
+`;
+    const phone = "14434839785"; // YOUR WHATSAPP NUMBER
+    window.location.href =
+      "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+  };
+</script>
 
 </body>
 </html>

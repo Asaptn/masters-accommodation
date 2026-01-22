@@ -1,58 +1,56 @@
-// SELECT APARTMENT
+// Prices per night
+const prices = {
+  "1 Bedroom Apartment": 350,
+  "2 Bedroom Apartment": 500,
+  "3 Bedroom Apartment": 700
+};
+
+// When Reserve button is clicked
 function selectApartment(apartmentName) {
   document.getElementById("apartment").value = apartmentName;
-  document.getElementById("booking").scrollIntoView({ behavior: "smooth" });
+
+  // Scroll to booking form
+  document.getElementById("booking").scrollIntoView({
+    behavior: "smooth"
+  });
 }
 
-// BOOKING FORM
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("bookingForm");
+// Handle booking form submission
+document.getElementById("bookingForm").addEventListener("submit", function (e) {
+  e.preventDefault(); // stop page refresh
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const apartment = document.getElementById("apartment").value;
+  const checkin = document.getElementById("checkin").value;
+  const checkout = document.getElementById("checkout").value;
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const apartment = document.getElementById("apartment").value.trim();
-    const checkin = document.getElementById("checkin").value;
-    const checkout = document.getElementById("checkout").value;
+  if (!name || !email || !apartment || !checkin || !checkout) {
+    alert("Please fill all fields");
+    return;
+  }
 
-    if (!name || !email || !apartment || !checkin || !checkout) {
-      alert("❌ Please fill all fields");
-      return;
-    }
+  const nights =
+    (new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24);
 
-    const checkInDate = new Date(checkin);
-    const checkOutDate = new Date(checkout);
+  if (nights <= 0) {
+    alert("Invalid check-in or check-out date");
+    return;
+  }
 
-    if (checkOutDate <= checkInDate) {
-      alert("❌ Check-out must be after check-in");
-      return;
-    }
+  const amount = prices[apartment] * nights;
 
-    const nights =
-      (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+  // SAVE BOOKING DATA
+  const booking = {
+    name,
+    email,
+    apartment,
+    nights,
+    amount
+  };
 
-    let pricePerNight = 0;
+  sessionStorage.setItem("booking", JSON.stringify(booking));
 
-    if (apartment.includes("3 Bedroom")) pricePerNight = 700;
-    if (apartment.includes("2 Bedroom")) pricePerNight = 500;
-    if (apartment.includes("1 Bedroom")) pricePerNight = 350;
-
-    const amount = nights * pricePerNight;
-
-    const bookingData = {
-      name,
-      email,
-      apartment,
-      checkin,
-      checkout,
-      nights,
-      amount
-    };
-
-    sessionStorage.setItem("booking", JSON.stringify(bookingData));
-
-    window.location.href = "payment.html";
-  });
+  // GO TO PAYMENT PAGE
+  window.location.href = "payment.html";
 });
