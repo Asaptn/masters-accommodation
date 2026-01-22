@@ -2,69 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Payment</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment | Masters Accommodation</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    select, input {
+      padding: 10px;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    hr {
+      margin: 30px 0;
+    }
+  </style>
 </head>
 
 <body>
 
-  <div style="padding:40px; font-family: Arial;">
-    <h2>Payment Summary</h2>
+  <h2>Payment Summary</h2>
+  <p id="summary"></p>
 
-    <p id="summary"></p>
+  <hr>
 
-    <button id="payNow">Pay Now</button>
-  </div>
+  <h3>Pay with Card</h3>
+  <button id="payNow">Pay with Card</button>
 
-  <!-- Flutterwave -->
+  <hr>
+
+  <h3>Pay with Crypto</h3>
+
+  <select id="cryptoSelect" onchange="updateCrypto()">
+    <option value="USDT">USDT (TRC20)</option>
+    <option value="BTC">Bitcoin (BTC)</option>
+    <option value="ETH">Ethereum (ERC20)</option>
+  </select>
+
+  <p><strong>Wallet Address</strong></p>
+  <input id="cryptoWallet" type="text" readonly onclick="this.select()" />
+
+  <p>
+    Amount: <strong id="cryptoAmount"></strong>
+  </p>
+
+  <p style="color: #555;">
+    Send the exact amount.<br>
+    After payment, you’ll be redirected to send a SMS with your details.
+  </p>
+
+  <button onclick="confirmCrypto()">I Have Paid (Crypto)</button>
+
   <script src="https://checkout.flutterwave.com/v3.js"></script>
-
-  <script>
-    // ✅ READ BOOKING FROM SESSION STORAGE
-    const booking = JSON.parse(sessionStorage.getItem("booking"));
-
-    if (!booking) {
-      alert("❌ No booking data found");
-      window.location.href = "index.html";
-    }
-
-    const {
-      name,
-      email,
-      apartment,
-      nights,
-      amount
-    } = booking;
-
-    // DISPLAY SUMMARY
-    document.getElementById("summary").innerHTML = `
-      <strong>Name:</strong> ${name}<br>
-      <strong>Email:</strong> ${email}<br>
-      <strong>Apartment:</strong> ${apartment}<br>
-      <strong>Nights:</strong> ${nights}<br>
-      <strong>Total:</strong> $${amount}
-    `;
-
-    // PAY NOW
-    document.getElementById("payNow").onclick = function () {
-      FlutterwaveCheckout({
-        public_key: "FLWPUBK-eedd3e4e11cc685c3c851a3173222836-X",
-        tx_ref: "tx_" + Date.now(),
-        amount: amount,
-        currency: "USD",
-        customer: {
-          email: email,
-          name: name
-        },
-        callback: function (response) {
-          if (response.status === "successful") {
-            sessionStorage.removeItem("booking");
-            window.location.href = "success.html";
-          }
-        }
-      });
-    };
-  </script>
+  <script src="payment.js"></script>
 
 </body>
 </html>
