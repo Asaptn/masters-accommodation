@@ -1,21 +1,29 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Masters Accommodation</title>
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const slides = document.querySelectorAll(".hero-slider img");
+  let current = 0;
 
-<a id="top"></a>
+  if (slides.length === 0) return;
+
+  setInterval(() => {
+    slides[current].classList.remove("active");
+    current = (current + 1) % slides.length;
+    slides[current].classList.add("active");
+  }, 5000);
+});
+</script>
 
 <!-- TAWK CHAT -->
 <script type="text/javascript">
@@ -30,116 +38,173 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
   s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-
 <!-- NAVBAR -->
 <header class="navbar">
-  <div class="logo">
-    <a href="#top">
-      <img src="images/logo.png" alt="Masters Accommodation Logo">
-    </a>
-    <span>Masters Accommodation</span>
+  <div class="nav-left">
+    <img src="images/logo.png" alt="Logo" class="logo">
+    <h1>Masters Accommodation</h1>
   </div>
-
   <nav>
     <a href="#apartments">Apartments</a>
-    <a href="#booking">Book Now</a>
+    <a href="#booking">Book</a>
+    <a href="#contact">Contact</a>
   </nav>
 </header>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1>Luxury Furnished <span>Apartments</span></h1>
-    <p class="hero-subtitle">Comfort. Elegance. Premium Living.</p>
+  <div class="hero-slider">
+    <img src="images/hero1.jpg" class="active" alt="Apartment 1">
+    <img src="images/hero2.jpg" alt="Apartment 2">
+    <img src="images/hero3.jpg" alt="Apartment 3">
   </div>
+
+  <div class="hero-overlay">
+    <h1>Luxury Furnished Apartments</h1>
+    <p>Comfort. Elegance. Premium Living.</p>
+    <a href="#apartments" class="btn-primary">View Apartments</a>
+  </div>
+</section>
+
 </section>
 
 <!-- APARTMENTS -->
 <section id="apartments" class="apartments">
+
   <h2>Available Apartments</h2>
 
-  <div class="card">
-    <p class="availability high">Multiple units available</p>
-    <div class="furnished-badge">Fully Furnished</div>
-    <h3>3 Bedroom Apartment</h3>
-    <p>$700 / night</p>
+  <div class="apartment-grid">
 
-    <ul class="features">
-      <li>🛋️ Living Room</li>
-      <li>🚿 3 Private Toilets</li>
-      <li>🚗 Parking Space</li>
-      <li>🧺 Laundry Area</li>
-      <li>🍳 Kitchen</li>
-      <li>📶 Free Wi-Fi</li>
-    </ul>
+    <!-- CARD 1 -->
+    <div class="apartment-card">
+      <img src="images/apt1.jpg" alt="1 Bedroom">
+      <div class="card-content">
+        <h3>1 Bedroom Apartment</h3>
+        <ul>
+          <p class="price">$350 / night</p>
+          <li>🛋 Living Room</li>
+          <li>🚿 Private Toilet</li>
+          <li>🚗 Parking Space</li>
+          <li>🧺 Laundry Area</li>
+          <li>🍳 Kitchen</li>
+          <li>📶 Free Wi-Fi</li>
+        <button class="btn reserve-btn" onclick="selectApartment('1 Bedroom Apartment')">
+          Reserve
+        </button>
+      </div>
+    </div>
 
-    <button onclick="selectApartment('3 Bedroom Apartment')">Reserve</button>
-  </div>
+    <!-- CARD 2 -->
+    <div class="apartment-card">
+      <img src="images/apt2.jpg" alt="2 Bedroom">
+      <div class="card-content">
+        <h3>2 Bedroom Apartment</h3>
+        <ul>
+               <p class="price">$500 / night</p>
+         <li>🛋 Living Room</li>
+        <li>🚿 2 Private Toilets</li>
+        <li>🚗 Parking Space</li>
+        <li>🧺 Laundry Area</li>
+        <li>🍳 Kitchen</li>
+        <li>📶 Free Wi-Fi</li>
+    
+        </ul>
+        <button class="btn reserve-btn" onclick="selectApartment('2 Bedroom Apartment')">
+          Reserve
+        </button>
+      </div>
+    </div>
 
-  <div class="card">
-    <p class="availability high">Available: 10+ units</p>
-    <div class="furnished-badge">Fully Furnished</div>
-    <h3>2 Bedroom Apartment</h3>
-    <p>$500 / night</p>
+    <!-- CARD 3 -->
+    <div class="apartment-card">
+      <img src="images/apt3.jpg" alt="3 Bedroom">
+      <div class="card-content">
+        <h3>3 Bedroom Apartment</h3>
+        <ul>
+          <p class="price">$700 / night</p>
+        <li>🛋 Living Room</li>
+        <li>🚿 3 Private Toilets</li>
+        <li>🚗 Parking Space</li>
+        <li>🧺 Laundry Area</li>
+        <li>🍳 Kitchen</li>
+        <li>📶 Free Wi-Fi</li>
 
-    <ul class="features">
-      <li>🛋️ Living Room</li>
-      <li>🚿 2 Private Toilets</li>
-      <li>🚗 Parking Space</li>
-      <li>🧺 Laundry Area</li>
-      <li>🍳 Kitchen</li>
-      <li>📶 Free Wi-Fi</li>
-    </ul>
+        <button class="btn reserve-btn" onclick="selectApartment('3 Bedroom Apartment')">
+          Reserve
+        </button>
+      </div>
+    </div>
 
-    <button onclick="selectApartment('2 Bedroom Apartment')">Reserve</button>
-  </div>
-
-  <div class="card">
-    <p class="availability medium">Available: 8 units</p>
-    <div class="furnished-badge">Fully Furnished</div>
-    <h3>1 Bedroom Apartment</h3>
-    <p>$350 / night</p>
-
-    <ul class="features">
-      <li>🛋️ Living Room</li>
-      <li>🚿 1 Private Toilet</li>
-      <li>🚗 Parking Space</li>
-      <li>🧺 Laundry Area</li>
-      <li>🍳 Kitchen</li>
-      <li>📶 Free Wi-Fi</li>
-    </ul>
-
-    <button onclick="selectApartment('1 Bedroom Apartment')">Reserve</button>
   </div>
 </section>
 
 <!-- BOOKING -->
-<section id="booking">
-  <h2>Book an Apartment</h2>
+<section id="booking" class="booking">
+  <h2>Book Your Stay</h2>
 
   <form id="bookingForm">
-    <input type="text" id="name" placeholder="Your Name" required>
-    <input type="email" id="email" placeholder="Your Email" required>
-    <input type="text" id="apartment" placeholder="Selected Apartment" readonly required>
 
-    <label>Check-in</label>
-    <input type="date" id="checkin" required>
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email" required>
 
-    <label>Check-out</label>
-    <input type="date" id="checkout" required>
+    <select id="apartment" required>
+      <option value="">Select Apartment</option>
+      <option value="1 Bedroom Apartment">1 Bedroom Apartment</option>
+      <option value="2 Bedroom Apartment">2 Bedroom Apartment</option>
+      <option value="3 Bedroom Apartment">3 Bedroom Apartment</option>
+    </select>
 
-    <button type="submit">Proceed to Payment</button>
+    <div class="dates">
+      <input type="date" id="checkin" required>
+      <input type="date" id="checkout" required>
+    </div>
+
+    <button type="submit" class="btn">Proceed to Payment</button>
   </form>
-
-  <p id="successMessage" style="display:none;color:green;">
-    ✅ Booking submitted successfully!
-  </p>
 </section>
 
-<!-- SCRIPTS -->
-<script src="https://checkout.flutterwave.com/v3.js"></script>
-<script src="script.js"></script>
+<!-- FOOTER -->
+<footer id="contact" class="footer">
+  <p>© 2026 Masters Augusta Tournament</p>
+</footer>
+
+<!-- SCRIPT -->
+<script>
+function selectApartment(name) {
+  document.getElementById("apartment").value = name;
+  window.location.href = "#booking";
+}
+
+document.getElementById("bookingForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const apartment = document.getElementById("apartment").value;
+  const checkin = document.getElementById("checkin").value;
+  const checkout = document.getElementById("checkout").value;
+
+  const nights =
+    (new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24);
+
+  let rate = 0;
+  if (apartment.includes("1 Bedroom")) rate = 350;
+  if (apartment.includes("2 Bedroom")) rate = 500;
+  if (apartment.includes("3 Bedroom")) rate = 700;
+
+  const amount = nights * rate;
+
+  sessionStorage.setItem("booking", JSON.stringify({
+    name,
+    email,
+    apartment,
+    nights,
+    amount
+  }));
+
+  window.location.href = "payment.html";
+});
+</script>
 
 </body>
 </html>
