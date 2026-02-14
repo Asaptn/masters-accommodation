@@ -202,9 +202,26 @@ document.getElementById("bookingForm").addEventListener("submit", function(e) {
     amount
   }));
 
-  window.location.href = "payment.html";
+// Redirect customer to SMS instead of payment page
+let phoneNumber = "+14044457329"; // <-- put your phone number here
+
+let message =
+  "Hello, I just submitted a booking request.\n\n" +
+  "Booking Details:\n" +
+  "Name: " + name + "\n" +
+  "Email: " + email + "\n" +
+  "Apartment: " + apartment + "\n" +
+  "Nights: " + nights + "\n" +
+  "Total Amount: $" + amount + "\n\n" +
+  "Please confirm my reservation. Thank you!";
+
+// SMS redirect
+window.location.href =
+  "sms:" + phoneNumber + "?body=" + encodeURIComponent(message);
+});
 });
 </script>
 
 </body>
 </html>
+
